@@ -23,10 +23,18 @@
         </div>
     </form>
     
-    %for name, link in results:
-    <h3>{{name}}<h3>
-    <p style="width:1000px"><a href="{{link}}" rel="magnet">{{link}}</a>
+    % i=1
+    % for name, link in results:
+    <p>
+        <h3 id="C_{{i}}">{{name}}</h3>
+        <div style="width:800px, line-break:none"><a href="{{link}}" rel="magnet">{{link}}</a></div>
+        <form action="/xunlei-lixian" method="POST" target="_black">
+            <input type="submit" value="添加到迅雷离线"></input>
+            <input type="hidden" value="{{link}}" name="magnet_link"></link>
+            <input type="hidden" value="C_{{i}}" name="anchor"></link>
+        </form>
     </p>
-    %end
+    % i = i + 1
+    % end
 </body>
 </html>

@@ -13,7 +13,7 @@ def tk_search(keyword):
 
     request = urllib2.Request(urlparse.urljoin(TK_URL,keyword))
     opener = urllib2.build_opener(SmartRedirectHandler())
-    opener.addheaders = [('User-agent', 'User-Agent   Mozilla/5.0')]
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     f = opener.open(request)
     parser.feed(unicode(f.read(), "utf8"))
 
@@ -23,8 +23,8 @@ def tk_search(keyword):
 
     results = list()
     for i in range(n):
-        name = i<nn and parser.names[i] or None
-        link = i<nl and parser.links[i] or None
+        name = parser.names[i] if i<nn else None
+        link = parser.links[i] if i<nl else None
         results.append((name, link))
     return results
 
