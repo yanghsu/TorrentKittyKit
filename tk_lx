@@ -1,6 +1,10 @@
 #!/bin/bash
 
 KEYWORD=$1
-LX_CMD=lx
 
-python tklib.py $KEYWORD | xargs $LX_CMD add 
+if [ -z "$LX_EXEC"]; then
+    echo "LX_EXEC not set. Exit!"
+    exit 1
+fi
+
+python tklib.py $KEYWORD | xargs $LX_EXEC add 

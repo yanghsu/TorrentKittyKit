@@ -6,6 +6,8 @@ from bottle import run, route, view, request, redirect
 
 import tklib
 
+LX_EXEC = 'lx'
+
 @route('/')
 @view('index.html')
 def index():
@@ -33,14 +35,20 @@ def xunlei_lixian():
 
     output = ''
     retval = '0'
-    cmd = 'lx add "'+magnet.encode('utf8')+'"'
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    lx_cmd = LX_EXEC + ' add ' + magnet.encode('utf8')
+    p = subprocess.Popen(lx_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for line in p.stdout.readlines():
         output = output + line
     retval = p.wait()
-    return dict(retval=retval, output=output, referer=refer_url)
+    return dict(retval=retval, output=output, referer=refer_url, environ=os.environ)
     
 
 
 if __name__ == '__main__':
+    lx_exec = os.environ.get('LX_EXEC', None)
+    if lx_exec is None:
+        print "WARN: $LX_EXEC isn't properly set. Use default value ["+LX_EXEC+"]"
+    else:
+        LX_EXEC = lx_exec
+
     run(host='0.0.0.0', port=8080, debug=True)

@@ -37,4 +37,6 @@ TorrentKittyKit是一个用来从 www.torrentkitty.com 查找 -哔- 资料的工
 
 详见 [https://github.com/iambus/xunlei-lixian](https://github.com/iambus/xunlei-lixian)
 
+设置环境变量 _LX\_EXEC_ 指向 _lixian\_cli.py_ 脚本位置
+
 
