@@ -1,10 +1,22 @@
 <html language="en">
 <head>
-    <title> Add to Xunlei - TorrentKitty </title>
+    <title> {{name}} </title>
+    <style type="text/css">
+      div.warning {
+        background-color: #ffe4e4;
+        border: 1px solid #f66;
+      }
+    </style>
 </head>
 <body>
-    <p>retval={{retval}}</p>
-    <p>{{output}}</p>
-    <p><a href="{{referer}}">&lt;&lt;Back</a></p>
+  %if error:
+  <div class="warning">
+    {{error}}
+  </div>
+  %end
+  %if output:
+  <p>{{output}}</p>
+  %end
+  <p><a href="{{referer}}">&lt;&lt;Back</a></p>
 </body>
 </html>

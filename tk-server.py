@@ -1,12 +1,16 @@
 #!/usr/bin/python
 
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import os
 import subprocess
 from bottle import run, route, view, request, redirect
-
 import tklib
 
-LX_EXEC = 'lx'
+
+LX_PATH = "lx"
 
 @route('/')
 @view('index.html')
@@ -27,28 +31,26 @@ def search_get(keyword):
 @route('/xunlei-lixian', method='POST')
 @view('lixian.html')
 def xunlei_lixian():
+    name = request.forms.name
     magnet = request.forms.magnet_link     # unicode
     anchor = request.forms.anchor          # unicode
     refer_url = request.get_header('referer') # unicode
     if anchor:
         refer_url = refer_url + '#' + anchor
-
-    output = ''
-    retval = '0'
-    lx_cmd = LX_EXEC + ' add ' + magnet.encode('utf8')
-    p = subprocess.Popen(lx_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in p.stdout.readlines():
-        output = output + line
-    retval = p.wait()
-    return dict(retval=retval, output=output, referer=refer_url, environ=os.environ)
-    
-
+    cmd = ' '.join([XL_PATH, 'add', magnet.encode('utf8')])
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    error = ''
+    output = ''.join(p.stdout.readlines())
+    if p.wait():
+        error, output = output, error
+    return dict(referer=refer_url, name=name, error=error, output=output)
 
 if __name__ == '__main__':
-    lx_exec = os.environ.get('LX_EXEC', None)
-    if lx_exec is None:
-        print "WARN: $LX_EXEC isn't properly set. Use default value ["+LX_EXEC+"]"
+    config = configparser.ConfigParser()
+    try:
+        config.read([os.path.expanduser(os.path.join('~', '.tk.conf'))])
+    except configparser.Error:
+        pass
     else:
-        LX_EXEC = lx_exec
-
+        XL_PATH = os.path.expanduser(config.get('xl', 'path'))
     run(host='0.0.0.0', port=8080, debug=True)
