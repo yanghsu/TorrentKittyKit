@@ -25,6 +25,14 @@ TorrentKittyKit是一个用来从 www.torrentkitty.com 查找 -哔- 资料的工
 
     ./tk_lx MIDD-962
 
+## tk-server.py
+
+一个简单的B/S查询服务器
+
+    python tk-server.py
+
+服务监听在8080端口
+
 ## 安装迅雷离线脚本
 
 详见 [https://github.com/iambus/xunlei-lixian](https://github.com/iambus/xunlei-lixian)
