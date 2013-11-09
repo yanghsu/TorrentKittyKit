@@ -21,7 +21,7 @@ TorrentKittyKit是一个用来从 www.torrentkitty.com 查找 -哔- 资料的工
 
     python tklib.py $KEYWORD | xargs $LX_CMD add 
 
-可将LX_CMD改为正确的迅雷离线脚本命令。使用例子
+可将`LX_CMD`改为正确的迅雷离线脚本命令。使用例子
 
     ./tk_lx MIDD-962
 
@@ -37,6 +37,10 @@ TorrentKittyKit是一个用来从 www.torrentkitty.com 查找 -哔- 资料的工
 
 详见 [https://github.com/iambus/xunlei-lixian](https://github.com/iambus/xunlei-lixian)
 
-设置环境变量 _LX\_EXEC_ 指向 _lixian\_cli.py_ 脚本位置
+查询服务器支持和离线下载工具的集成。缺省使用`lx`作为`lixian_cli.py`脚本的名字，可使用配置文件`~/.tk.conf`来设置它。配置文件如下：
+
+    [lx]
+    path=~/bin/lx
+
 
 

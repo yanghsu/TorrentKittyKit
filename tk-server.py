@@ -37,7 +37,7 @@ def xunlei_lixian():
     refer_url = request.get_header('referer') # unicode
     if anchor:
         refer_url = refer_url + '#' + anchor
-    cmd = ' '.join([XL_PATH, 'add', magnet.encode('utf8')])
+    cmd = ' '.join([LX_PATH, 'add', magnet.encode('utf8')])
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     error = ''
     output = ''.join(p.stdout.readlines())
@@ -52,5 +52,5 @@ if __name__ == '__main__':
     except configparser.Error:
         pass
     else:
-        XL_PATH = os.path.expanduser(config.get('xl', 'path'))
+        LX_PATH = os.path.expanduser(config.get('lx', 'path'))
     run(host='0.0.0.0', port=8080, debug=True)
