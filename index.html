@@ -15,9 +15,14 @@
             <input type="text" name="keyword"> </input>
             %end
             <input type="submit" value="Search"></input>
+            %if keyword:
+            <a href="http://www.torrentkitty.com/search/{{keyword}}"> http://www.torrentkitty.com/search/{{keyword}}</a>
+            %else:
+            <a href="http://www.torrentkitty.com/">http://www.torrentkitty.com/</a>
+            %end
         </div>
     </form>
-
+    
     %for name, link in results:
     <h3>{{name}}<h3>
     <p style="width:1000px"><a href="{{link}}" rel="magnet">{{link}}</a>

@@ -17,10 +17,14 @@ def tk_search(keyword):
     f = opener.open(request)
     parser.feed(unicode(f.read(), "utf8"))
 
+    nn = len(parser.names)
+    nl = len(parser.links)
+    n = max(nn, nl)
+
     results = list()
-    for i in range(0, len(parser.results), 2):
-        name = parser.results[i]
-        link = parser.results[i+1]
+    for i in range(n):
+        name = i<nn and parser.names[i] or None
+        link = i<nl and parser.links[i] or None
         results.append((name, link))
     return results
 
@@ -31,7 +35,8 @@ class TorrentKittyParser(HTMLParser):
         HTMLParser.__init__(self)
 
         self.nameStart = False
-        self.results = list()
+        self.names = list()
+        self.links = list()
 
     def handle_starttag(self, tag, attrs):
         if tag == "td":
@@ -48,7 +53,7 @@ class TorrentKittyParser(HTMLParser):
                 elif k == u"href":
                     href = v
             if found and href:
-                self.results.append(href)
+                self.links.append(href)
 
     def handle_endtag(self, tag):
         if self.nameStart: 
@@ -56,7 +61,7 @@ class TorrentKittyParser(HTMLParser):
 
     def handle_data(self, data):
         if self.nameStart:
-            self.results.append(data)
+            self.names.append(data)
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):     
     def http_error_301(self, req, fp, code, msg, headers):  
@@ -83,3 +88,4 @@ if __name__ == "__main__":
 
     for _, link in results:
         print link
+        break
