@@ -1,0 +1,27 @@
+<html language="en">
+<head>
+%if keyword:
+    <title> {{keyword}} - TorrentKitty </title>
+%else:
+    <title> TorrentKitty </title>
+%end
+</head>
+<body>
+    <form name="search" action="/search" method="POST">
+        <div>
+            %if keyword:
+            <input type="text" name="keyword" value="{{keyword}}"> </input>
+            %else:
+            <input type="text" name="keyword"> </input>
+            %end
+            <input type="submit" value="Search"></input>
+        </div>
+    </form>
+
+    %for name, link in results:
+    <h3>{{name}}<h3>
+    <p style="width:1000px"><a href="{{link}}" rel="magnet">{{link}}</a>
+    </p>
+    %end
+</body>
+</html>

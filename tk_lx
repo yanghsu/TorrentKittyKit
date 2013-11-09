@@ -1,0 +1,6 @@
+#!/bin/bash
+
+KEYWORD=$1
+LX_CMD=lx
+
+python tklib.py $KEYWORD | xargs $LX_CMD add 
