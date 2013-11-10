@@ -18,7 +18,7 @@ def index():
 
 @route('/search', method='POST')
 def search():
-    query = urllib.parse.quote(request.forms.keyword)       # unicode
+    query = request.forms.keyword       # unicode
     redirect('/search?'+urllib.parse.urlencode({'q':query}))
 
 @route('/search', method='GET')
