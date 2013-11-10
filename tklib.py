@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
-from HTMLParser import HTMLParser
-import urllib2
-import urlparse
+from html.parser import HTMLParser
+import urllib.request, urllib.error, urllib.parse
 import sys
 
 __all__ = ["tk_search"]
@@ -11,11 +10,12 @@ def tk_search(keyword):
     TK_URL = 'http://www.torrentkitty.com/search/'
     parser = TorrentKittyParser()
 
-    request = urllib2.Request(urlparse.urljoin(TK_URL,keyword))
-    opener = urllib2.build_opener(SmartRedirectHandler())
+    uri = urllib.parse.urljoin(TK_URL,urllib.parse.quote(keyword))
+    request = urllib.request.Request(uri)
+    opener = urllib.request.build_opener(SmartRedirectHandler())
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     f = opener.open(request)
-    parser.feed(unicode(f.read(), "utf8"))
+    parser.feed(str(f.read(), "utf8"))
 
     nn = len(parser.names)
     nl = len(parser.links)
@@ -28,7 +28,7 @@ def tk_search(keyword):
         results.append((name, link))
     return results
 
-    
+
 # create a subclass and override the handler methods
 class TorrentKittyParser(HTMLParser):
     def __init__(self):
@@ -40,41 +40,41 @@ class TorrentKittyParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if tag == "td":
-            for k, v in attrs:  
-                if k == u"class" and v == u"name":
+            for k, v in attrs:
+                if k == "class" and v == "name":
                     self.nameStart = True
                     break
         elif tag == "a":
             href = ""
             found = False
             for k, v in attrs:
-                if k == u"rel" and v==u"magnet":
+                if k == "rel" and v=="magnet":
                     found = True
-                elif k == u"href":
+                elif k == "href":
                     href = v
             if found and href:
                 self.links.append(href)
 
     def handle_endtag(self, tag):
-        if self.nameStart: 
+        if self.nameStart:
             self.nameStart = False
 
     def handle_data(self, data):
         if self.nameStart:
             self.names.append(data)
 
-class SmartRedirectHandler(urllib2.HTTPRedirectHandler):     
-    def http_error_301(self, req, fp, code, msg, headers):  
-        result = urllib2.HTTPRedirectHandler.http_error_301(
-            self, req, fp, code, msg, headers)              
-        result.status = code                                 
-        return result                                       
+class SmartRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def http_error_301(self, req, fp, code, msg, headers):
+        result = urllib.request.HTTPRedirectHandler.http_error_301(
+            self, req, fp, code, msg, headers)
+        result.status = code
+        return result
 
     def http_error_302(self, req, fp, code, msg, headers):
-        result = urllib2.HTTPRedirectHandler.http_error_302(
-            self, req, fp, code, msg, headers)              
-        result.status = code                                
-        return result                 
+        result = urllib.request.HTTPRedirectHandler.http_error_302(
+            self, req, fp, code, msg, headers)
+        result.status = code
+        return result
 
 if __name__ == "__main__":
     # for test
@@ -87,5 +87,5 @@ if __name__ == "__main__":
     results = tk_search(keyword)
 
     for _, link in results:
-        print link
+        print(link)
         break

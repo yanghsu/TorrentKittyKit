@@ -1,12 +1,11 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 import os
 import subprocess
 from bottle import run, route, view, request, redirect
+import urllib.parse
 import tklib
 
 
@@ -19,12 +18,13 @@ def index():
 
 @route('/search', method='POST')
 def search():
-    keyword = request.forms.keyword       # unicode
-    redirect('/search/'+keyword.encode('utf8'))
+    query = urllib.parse.quote(request.forms.keyword)       # unicode
+    redirect('/search?'+urllib.parse.urlencode({'q':query}))
 
-@route('/search/<keyword>')
+@route('/search', method='GET')
 @view('index.html')
-def search_get(keyword):
+def search_get():
+    keyword = request.query.q
     results = tklib.tk_search(keyword)
     return dict(results=results, keyword=keyword)
 
@@ -37,10 +37,10 @@ def xunlei_lixian():
     refer_url = request.get_header('referer') # unicode
     if anchor:
         refer_url = refer_url + '#' + anchor
-    cmd = ' '.join([LX_PATH, 'add', magnet.encode('utf8')])
+    cmd = ' '.join([LX_PATH, 'add', magnet])
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     error = ''
-    output = ''.join(p.stdout.readlines())
+    output = ''.join(line.decode('utf-8') for line in p.stdout.readlines())
     if p.wait():
         error, output = output, error
     return dict(referer=refer_url, name=name, error=error, output=output)
