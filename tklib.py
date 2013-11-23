@@ -13,7 +13,7 @@ def tk_search(keyword):
     uri = urllib.parse.urljoin(TK_URL,urllib.parse.quote(keyword))
     request = urllib.request.Request(uri)
     opener = urllib.request.build_opener(SmartRedirectHandler())
-    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    opener.addheaders = [('User-agent', 'Mozilla')]
     f = opener.open(request)
     parser.feed(str(f.read(), "utf8"))
 
